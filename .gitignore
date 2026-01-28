@@ -1,0 +1,12 @@
+# IDE
+.idea/
+.vscode/
+
+# Claude
+.claude/
+
+# Certificats Let's Encrypt (générés sur le serveur)
+traefik/acme.json
+
+# macOS
+.DS_Store
