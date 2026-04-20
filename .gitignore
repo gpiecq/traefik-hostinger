@@ -8,5 +8,8 @@
 # Certificats Let's Encrypt (générés sur le serveur)
 traefik/acme.json
 
+# Variables d'environnement (injectées par le workflow CI/CD)
+.env
+
 # macOS
 .DS_Store

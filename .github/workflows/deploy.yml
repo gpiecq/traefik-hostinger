@@ -15,8 +15,15 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: LETSENCRYPT_EMAIL,TRAEFIK_DASHBOARD_HOST,TRAEFIK_DASHBOARD_AUTH
           script: |
             cd ~/traefik
             git pull origin main
+            printf "LETSENCRYPT_EMAIL=%s\nTRAEFIK_DASHBOARD_HOST=%s\nTRAEFIK_DASHBOARD_AUTH=%s\n" \
+              "$LETSENCRYPT_EMAIL" "$TRAEFIK_DASHBOARD_HOST" "$TRAEFIK_DASHBOARD_AUTH" > .env
             ./install.sh
             docker compose up -d
+        env:
+          LETSENCRYPT_EMAIL: ${{ secrets.LETSENCRYPT_EMAIL }}
+          TRAEFIK_DASHBOARD_HOST: ${{ secrets.TRAEFIK_DASHBOARD_HOST }}
+          TRAEFIK_DASHBOARD_AUTH: ${{ secrets.TRAEFIK_DASHBOARD_AUTH }}

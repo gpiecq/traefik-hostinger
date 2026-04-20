@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:v3.2
+    image: traefik:v3
     container_name: traefik
     restart: unless-stopped
     security_opt:
@@ -14,6 +14,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./traefik/acme.json:/acme.json
+      - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
     networks:
       - traefik-public
     labels:
@@ -24,10 +25,7 @@ services:
       - "traefik.http.routers.traefik-dashboard.tls.certresolver=letsencrypt"
       - "traefik.http.routers.traefik-dashboard.service=api@internal"
       - "traefik.http.routers.traefik-dashboard.middlewares=dashboard-auth"
-      # Basic auth pour le dashboard
-      - "traefik.http.middlewares.dashboard-auth.basicauth.users=${TRAEFIK_DASHBOARD_AUTH}"
 
 networks:
   traefik-public:
-    name: traefik-public
-    driver: bridge
+    external: true
