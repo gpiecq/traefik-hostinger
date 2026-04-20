@@ -33,6 +33,9 @@ providers:
     exposedByDefault: false
     network: traefik-public
     watch: true
+  file:
+    filename: /etc/traefik/dynamic.yml
+    watch: true
 
 certificatesResolvers:
   letsencrypt:
