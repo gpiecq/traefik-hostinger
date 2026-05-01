@@ -18,13 +18,16 @@ jobs:
           envs: LETSENCRYPT_EMAIL,TRAEFIK_DASHBOARD_HOST,TRAEFIK_DASHBOARD_AUTH
           script: |
             cd ~/traefik
-            git pull origin main
-            printf "LETSENCRYPT_EMAIL=%s\nTRAEFIK_DASHBOARD_HOST=%s\nTRAEFIK_DASHBOARD_AUTH=%s\n" \
-              "$LETSENCRYPT_EMAIL" "$TRAEFIK_DASHBOARD_HOST" "$TRAEFIK_DASHBOARD_AUTH" > .env
-            sed "s|HASH_ICI|${TRAEFIK_DASHBOARD_AUTH}|g" traefik/dynamic.yml > traefik/dynamic.yml.tmp \
+            git fetch origin main
+            git checkout -- .
+            git clean -f traefik/dynamic.yml
+            git reset --hard origin/main
+            printf "LETSENCRYPT_EMAIL=%s\nTRAEFIK_DASHBOARD_HOST=%s\n" \
+              "$LETSENCRYPT_EMAIL" "$TRAEFIK_DASHBOARD_HOST" > .env
+            sed "s|HASH_ICI|${TRAEFIK_DASHBOARD_AUTH}|" traefik/dynamic.yml > traefik/dynamic.yml.tmp \
               && mv traefik/dynamic.yml.tmp traefik/dynamic.yml
             ./install.sh
-            docker compose up -d
+            docker compose up -d --force-recreate
         env:
           LETSENCRYPT_EMAIL: ${{ secrets.LETSENCRYPT_EMAIL }}
           TRAEFIK_DASHBOARD_HOST: ${{ secrets.TRAEFIK_DASHBOARD_HOST }}
