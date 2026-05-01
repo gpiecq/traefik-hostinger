@@ -21,6 +21,8 @@ jobs:
             git pull origin main
             printf "LETSENCRYPT_EMAIL=%s\nTRAEFIK_DASHBOARD_HOST=%s\nTRAEFIK_DASHBOARD_AUTH=%s\n" \
               "$LETSENCRYPT_EMAIL" "$TRAEFIK_DASHBOARD_HOST" "$TRAEFIK_DASHBOARD_AUTH" > .env
+            sed "s|HASH_ICI|${TRAEFIK_DASHBOARD_AUTH}|g" traefik/dynamic.yml > traefik/dynamic.yml.tmp \
+              && mv traefik/dynamic.yml.tmp traefik/dynamic.yml
             ./install.sh
             docker compose up -d
         env:
