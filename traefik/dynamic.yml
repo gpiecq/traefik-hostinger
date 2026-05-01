@@ -3,4 +3,4 @@ http:
     dashboard-auth:
       basicAuth:
         users:
-          - "admin:HASH_ICI"
+          - "HASH_ICI"
